@@ -1,6 +1,5 @@
 ﻿namespace BullsAndCows
 {
-
     public class RandomNumber
     {
         private string _secretNumber;
@@ -8,7 +7,7 @@
         public RandomNumber()
         {
             Random random = new Random();
-            _secretNumber = random.Next(1000, 9999).ToString();
+            _secretNumber = random.Next(1000, 9999).ToString();         
         }
 
         public (int bulls, int cows) Guess(string guess)
@@ -33,13 +32,27 @@
 
         public void StartGame()
         {
+            bool isValid;
             Console.WriteLine("Угадайте 4-значное число");
 
             for (int tries = 0; tries < 5; tries++)
             {
-                Console.WriteLine("Есть догадки?");
+                string guess;
 
-                string guess = Console.ReadLine();
+                do
+                {
+                    Console.WriteLine("Есть догадки?");
+                    guess = Console.ReadLine();
+
+                    isValid = IsValidGuess(guess);
+
+                    if (!isValid)
+                    {
+                        Console.WriteLine("Ошибка! Введите 4-х значное число от 1000 до 9999");
+
+                    }
+                }
+                while (!isValid);
 
                 var result = Guess(guess);
 
@@ -54,6 +67,11 @@
 
             }
             Console.WriteLine($"Ну ничего, угадаешь в следуйщий раз.Правильный ответ:{_secretNumber}");
+        }
+
+        private bool IsValidGuess(string guess)
+        {
+            return int.TryParse(guess, out int number) && number >= 1000 && number <= 9999;
         }
     }
 }
